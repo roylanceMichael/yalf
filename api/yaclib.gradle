@@ -1,0 +1,52 @@
+import org.roylance.yaclib.YaclibModel
+import org.roylance.yaclib.YaclibPlugin
+
+group 'org.roylance.yafl'
+version = "$major.$minor"
+
+apply plugin: 'java'
+
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url repoUrl_ }
+    }
+    dependencies {
+        classpath "org.roylance.yaclib:core:$yaclibMajor.$yaclibMinor"
+        classpath "org.roylance.yafl:api:$major.$minor"
+    }
+}
+
+task execute(type: YaclibPlugin) {
+    location = new File(System.getProperty("user.dir")).parentFile.toString()
+
+    mainModel = "org.roylance.yafl.YaflModel"
+    mainController = "org.roylance.yafl.YaflMainController"
+
+    dependencyDescriptors = new ArrayList<>()
+    thirdPartyServerDependencies = new ArrayList<>()
+    nugetKey = System.getenv('NUGET_KEY')
+
+    mainDependency = YaclibModel.Dependency.newBuilder()
+        .setGroup("org.roylance.yafl")
+        .setName("api")
+        .setAuthorName(author_)
+        .setLicense(license_)
+        .setGithubRepo(githubRepo_)
+        .setMajorVersion(major.toInteger())
+        .setMinorVersion(minor.toInteger())
+        .setTypescriptModelFile("YaflModel")
+        .setNugetRepository(YaclibModel.Repository.newBuilder()
+            .setRepositoryType(YaclibModel.RepositoryType.NUGET)
+            .build())
+        .setNpmRepository(YaclibModel.Repository.newBuilder()
+            .setRepositoryType(YaclibModel.RepositoryType.NPMJS)
+            .build())
+        .setMavenRepository(YaclibModel.Repository.newBuilder()
+            .setName(repoName_)
+            .setUrl(repoUrl_)
+            .setRepositoryType(YaclibModel.RepositoryType.maven).build())
+            .build()
+}

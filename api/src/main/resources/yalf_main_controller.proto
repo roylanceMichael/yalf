@@ -1,0 +1,6 @@
+syntax = "proto3";
+package org.roylance.yalf;
+
+import "yalf_model.proto";
+
+// todo: fill out your model here
